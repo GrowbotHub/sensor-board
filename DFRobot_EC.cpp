@@ -62,7 +62,7 @@ void DFRobot_EC::begin()
 float DFRobot_EC::readEC(float voltage, float temperature)
 {
     float value = 0,valueTemp = 0;
-    this->_rawEC = 1000*voltage/RES2/ECREF;
+    this->_rawEC = 1000*voltage/RES2/ECREF; //in Volt/200/820
     valueTemp = this->_rawEC * this->_kvalue;
     //automatic shift process
     //First Range:(0,2); Second Range:(2,20)
