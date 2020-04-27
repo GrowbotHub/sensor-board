@@ -10,6 +10,9 @@
 
 #define EC_PIN A1   //Analog PIN 1
 #define TEMP_PIN 5  //Digital Pin 5
+#define PH_PIN A2 //Analog PIN 2
+#define PH_SLOPE -39 //Slope of the PH via experiment
+#define PH_OFFSET 1118 //From experiment
 #define ONE_WIRE_BUS 2
 #define I2C_ADDRESS 0x07
 #define DEBUG 1
@@ -18,6 +21,9 @@
 float voltage;
 float tdsValue = 0;
 float ecValue = 0;
+float phValue;
+float phSlope = -39;
+float phOffset = 1118;
 float temperature = 25;
 //DFRobot_EC ec;
 
@@ -42,6 +48,9 @@ void setup() {
   // Configure EC
   //ec.begin();
   //ec.calibration(voltage, temperature);
+  
+  //Configure PH
+  pinMode(PH_PIN,INPUT);
 }
 
 void loop() {
@@ -55,13 +64,18 @@ void loop() {
     // EC sensor
     ecValue = readEC(temperature);
 
+    // PH sensor
+
+    phValue = (analogRead(PH_PIN)-phOffset)/phSlope;
     // Send to UART
 #if DEBUG == 1
     Serial.print("Temperature: ");
     Serial.print(temperature, 1);
     Serial.print("^C  EC: ");
     Serial.print(ecValue, 2);
-    Serial.println("ms/cm");
+    Serial.print("ms/cm  PH: ");
+    Serial.print(phValue);
+    Serial.println("");
 #endif
   }
 }
