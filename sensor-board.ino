@@ -83,12 +83,17 @@ void loop() {
 void requestEvent()
 {
   byte data[] = {
-    (byte)temperature,
-    (byte)((temperature - (byte)temperature) * 0xFF),
+    (byte)temperature,                                //Integer part
+    (byte)((temperature - (byte)temperature) * 100),  //Decimal part
     (byte)ecValue,
-    (byte)((ecValue - (byte)ecValue) * 0xFF),
+    (byte)((ecValue - (byte)ecValue) * 100),
+    (byte)phValue,
+    (byte)((phValue - (byte)phValue) * 100),
   };
-  Wire.write(data, 4);
+  #if DEBUG == 1
+  Serial.println("Request received, sending data");
+  #endif
+  Wire.write(data, 6);
 }
 
 float readEC(float temperature) {
