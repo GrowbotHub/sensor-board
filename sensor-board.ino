@@ -16,7 +16,8 @@
 #define ONE_WIRE_BUS 2
 #define I2C_ADDRESS 0x07
 #define DEBUG 1
-
+#define WATER_OUT 11
+#define WATER_IN 12
 //GravityTDS gravityTds;
 float voltage;
 float tdsValue = 0;
@@ -45,6 +46,11 @@ void setup() {
   //sensors.begin();
   temperature = myTemp.temperature();
 
+  //Water level sensor
+  pinMode(WATER_OUT,OUTPUT);
+  pinMode(WATER_IN,INPUT);
+  digitalWrite(WATER_OUT,HIGH);
+  
   // Configure EC
   //ec.begin();
   //ec.calibration(voltage, temperature);
@@ -76,6 +82,8 @@ void loop() {
     Serial.print("ms/cm  PH: ");
     Serial.print(phValue);
     Serial.println("");
+    Serial.print("Water In :");
+    Serial.println(digitalRead(WATER_IN));
 #endif
   }
 }
