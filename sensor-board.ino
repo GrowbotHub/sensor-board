@@ -8,8 +8,13 @@
 //#include "GravityTDS.h"
 
 
+
+#define VCC_TEMP_PIN 3 //VCC for temp sensor Digital Pin 3
+#define GND_TEMP_PIN 4 //GND for temp Digital Pin 4
+#define TEMP_PIN 2  //Digital Pin 2
 #define EC_PIN A1   //Analog PIN 1
-#define TEMP_PIN 5  //Digital Pin 5
+#define VCC_EC_PIN 5 //VCC for EC Digital Pin 5
+#define GND_EC_PIN 6 //GND for EC Digital Pin 6
 #define PH_PIN A2 //Analog PIN 2
 #define PH_SLOPE -39 //Slope of the PH via experiment
 #define PH_OFFSET 1118 //From experiment
@@ -40,8 +45,12 @@ void setup() {
   Wire.begin(I2C_ADDRESS);
   Wire.onRequest(requestEvent);
 
-  // Configure DS18B20
+  // Configure DS18B20 - Temperature Sensor
   pinMode(TEMP_PIN, INPUT);
+  pinMode(VCC_TEMP_PIN, OUTPUT);
+  digitalWrite(VCC_TEMP_PIN, HIGH);
+  pinMode(GND_TEMP_PIN, OUTPUT);
+  digitalWrite(GND_TEMP_PIN, LOW);
   myTemp.setpin(TEMP_PIN); //Set the pin to be used for temperature measurement
   //sensors.begin();
   temperature = myTemp.temperature();
@@ -52,11 +61,20 @@ void setup() {
   digitalWrite(WATER_OUT,HIGH);
   
   // Configure EC
+  pinMode(EC_PIN, INPUT);
+  pinMode(VCC_EC_PIN, OUTPUT); //Set VCC pin to output
+  digitalWrite(VCC_EC_PIN, HIGH); //Set VCC Pin to 5V
+  pinMode(GND_EC_PIN, OUTPUT); //Set GND pin to output
+  digitalWrite(GND_EC_PIN, LOW); //Set GND Pin to 0V
   //ec.begin();
   //ec.calibration(voltage, temperature);
   
   //Configure PH
   pinMode(PH_PIN,INPUT);
+  /*pinMode(VCC_PH_PIN, OUTPUT);
+  digitalWrite(VCC_PH_PIN, HIGH);
+  pinMode(GND_PH_PIN, OUTPUT);
+  digitalWrite(GND_PH_PIN, LOW);*/
 }
 
 void loop() {
